@@ -6,6 +6,7 @@ ChangeLog Latest updates:
 
 <b>[v23 - STABLE]</b><br/>
 - Acrescentado opção na configuração do módulo cahamda 'Debug Mode' que quando habilitado gera um arquivo de log chamado 'ppplusbrasil_debug_mode.log', nele será logado todas as informações dos processos de createPayment, salvando dados de todos os parametros utilizado durante o processo;
+- Correção de aplicação de desconto dentro do fluxo de Checkout transaparente.
 
 <b>[v22 - STABLE]</b><br/>
 - Log do generateUrl, responsável pela criação da URL, assim será possivel verificar quais informações a ação de criação de URL retornou (log: var/log/ppplusbrasil_controller_exception.log);
