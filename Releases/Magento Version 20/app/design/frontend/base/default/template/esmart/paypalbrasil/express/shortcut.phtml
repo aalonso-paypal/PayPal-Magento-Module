@@ -1,0 +1,78 @@
+<?php
+/**
+ * Smart E-commerce do Brasil Tecnologia LTDA
+ *
+ * INFORMAÇÕES SOBRE LICENÇA
+ *
+ * Open Software License (OSL 3.0).
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * DISCLAIMER
+ *
+ * Não edite este arquivo caso você pretenda atualizar este módulo futuramente
+ * para novas versões.
+ *
+ * @category    Esmart
+ * @package     Esmart_PayPalBrasil
+ * @copyright   Copyright (c) 2013 Smart E-commerce do Brasil Tecnologia LTDA. (http://www.e-smart.com.br)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ *
+ * @author     	Tiago Sampaio <tiago.sampaio@e-smart.com.br>
+ */
+
+/**
+ * @var $this Mage_Paypal_Block_Express_Shortcut
+ */
+?>
+<p class="paypal-logo">
+<?php $shortcutHtmlId = $this->getShortcutHtmlId() ?>
+
+<?php if ($this->isOrPositionBefore()): ?>
+    <span class="paypal-or"><?php echo $this->__('-OR-');?></span>
+<?php endif; ?>
+<a id="<?php echo $shortcutHtmlId ?>" href="<?php echo $this->getCheckoutUrl()?>"><img src="<?php echo $this->getImageUrl()?>" alt="<?php echo Mage::helper('paypal')->__('Checkout with PayPal');?>" title="<?php echo Mage::helper('paypal')->__('Checkout with PayPal');?>" /></a>
+<?php if ($this->isOrPositionAfter()): ?>
+    <span class="paypal-or"><?php echo $this->__('-OR-');?></span>
+<?php endif; ?>
+
+<?php
+/**
+ * Mask for loading
+ */
+$loader = $this->getLayout()->getBlock('paypalbrasil.express.loader');
+$loaderId = $loader->getLoaderId();
+
+echo $loader->toHtml();
+?>
+
+<script type="text/javascript">
+	//<![CDATA[
+	Event.observe('<?php echo $shortcutHtmlId ?>', 'click', function(event) {
+		$('<?php echo $loaderId ?>').show() ;
+	});
+	//]]>
+</script>
+
+<?php if ($this->getConfirmationUrl() || $this->getIsInCatalogProduct()): ?>
+<?php if ($this->getIsInCatalogProduct()): ?>
+    <input type="hidden" id="pp_checkout_url" name="return_url" value="" />
+<?php endif; ?>
+
+<script type="text/javascript">
+//<![CDATA[
+    Event.observe('<?php echo $shortcutHtmlId ?>', 'click', function(event) {
+        <?php if ($this->getConfirmationUrl()): ?>
+            if (confirm('<?php echo Mage::helper('core')->jsQuoteEscape($this->getConfirmationMessage())?>')) {
+                this.href = '<?php echo $this->getConfirmationUrl() ?>';
+            }
+        <?php endif; ?>
+        <?php if ($this->getIsInCatalogProduct()): ?>
+            $('pp_checkout_url').value = this.href;
+            productAddToCartForm.submit(this);
+            event.stop();
+        <?php endif; ?>
+    });
+//]]>
+</script>
+<?php endif; ?>
+</p>
