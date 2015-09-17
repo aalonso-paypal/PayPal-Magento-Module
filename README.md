@@ -1,0 +1,23 @@
+# PayPal-Magento-Module
+PayPal Brazil Official Module Repositiory containing constant updated versioning
+
+
+ChangeLog Latest updates:
+
+<b>[v23 - STABLE]</b><br/>
+- Acrescentado opção na configuração do módulo cahamda 'Debug Mode' que quando habilitado gera um arquivo de log chamado 'ppplusbrasil_debug_mode.log', nele será logado todas as informações dos processos de createPayment, salvando dados de todos os parametros utilizado durante o processo;
+
+<b>[v22 - STABLE]</b><br/>
+- Log do generateUrl, responsável pela criação da URL, assim será possivel verificar quais informações a ação de criação de URL retornou (log: var/log/ppplusbrasil_controller_exception.log);
+- Melhorias na captura do campos necessários para o createPayment, agora não será considerado apenas os dados já persistidos no banco de dados, mas também as informações preenchidas na interface do usuario (checkout) e que ainda não foram submetidas. (Esta ultima correção deve reduzir a ZERO os alertas equivocados de preenchimento dos dados do magento).
+
+<b>[v21]</b><br/>
+- Tratamento da flag 'payerTaxIdType', retornar BR_CPF quando o documento do cliente for compativel (quantidade de digitos) com CPF, e retornado BR_CNPJ quando a quantidade de digito não foi compativel com CPF, assumindo que é CNPJ;
+- Forçado a limpeza do iframe no momento que loading for exibido;
+- Adicionado novo tratamento DE/PARA para resolver o problema do 'line1' acusando pelo createPayment;
+
+<b>[v20]</b><br/>
+- Correção na manipulação no JSON;
+- Exibição de Alert se o approvalUrl retornar null (situação quando o cliente não preenche os dados iniciais do checkout);
+- Adicionado GIF de loading.
+
