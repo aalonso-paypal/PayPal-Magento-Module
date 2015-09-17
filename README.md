@@ -11,11 +11,13 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 
 <h2>ROADMAP - FUTURE RELEASES</h2>
 <b>[CHECKOUT COMPATIBILITIES]</b>
-- Inovarti OneStepCheckout.
-- FireCheckout OneStepCheckout.
+- Inovarti OneStepCheckout [v24].
+- FireCheckout OneStepCheckout [v25].
 
 <b>[FEATURES]</b>
-- Pay with Two Cards.
+- Shortcut Fix (Termos e Condições) [v23.1].
+- Pay with Two Cards [v26].
+- Hermes Minibrowser Compatibility [v26].
 
 <h2>CHANGELOG</h2>
 
