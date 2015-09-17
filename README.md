@@ -1,6 +1,13 @@
 # PayPal-Magento-Module
 PayPal Brazil Official Module Repositiory containing constant updated versioning
 
+<h2>Current Compatibilities</h2>
+<b>[MAGENTO VERSIONS]</b>
+- Magento 1.7.2 -> 1.9.X.
+
+<b>[CHECKOUT VERSIONS]</b>
+- Default OnePage.
+- MOIP OneStepCheckout.
 
 <h2>ChangeLog</h2>
 
