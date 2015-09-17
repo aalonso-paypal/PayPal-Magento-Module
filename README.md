@@ -1,7 +1,7 @@
 # PayPal-Magento-Module
 PayPal Brazil Official Module Repositiory containing constant updated versioning
 
-<h2>Current Compatibilities</h2>
+<h2>CURRENT COMPATIBILITIES</h2>
 <b>[MAGENTO VERSIONS]</b>
 - Magento 1.7.2 -> 1.9.X.
 
@@ -9,7 +9,15 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 - Default OnePage.
 - MOIP OneStepCheckout.
 
-<h2>ChangeLog</h2>
+<h2>ROADMAP - FUTURE RELEASES</h2>
+<b>[CHECKOUT COMPATIBILITIES]</b>
+- Inovarti OneStepCheckout.
+- FireCheckout OneStepCheckout.
+
+<b>[FEATURES]</b>
+- Pay with Two Cards.
+
+<h2>CHANGELOG</h2>
 
 <b>[v23 - STABLE]</b><br/>
 - Acrescentado opção na configuração do módulo cahamda 'Debug Mode' que quando habilitado gera um arquivo de log chamado 'ppplusbrasil_debug_mode.log', nele será logado todas as informações dos processos de createPayment, salvando dados de todos os parametros utilizado durante o processo;
