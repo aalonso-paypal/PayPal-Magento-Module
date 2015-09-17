@@ -15,15 +15,17 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 - FireCheckout OneStepCheckout [v25].
 
 <b>[FEATURES]</b>
-- Shortcut Fix (Termos e Condições) [v23.1].
+- Shortcut Fix (Termos e Condições) [v23.2].
 - Pay with Two Cards [v26].
 - Hermes Minibrowser Compatibility [v26].
 
 <h2>CHANGELOG</h2>
 
+<b>[v23.1 - STABLE]</b><br/>
+- Corrigido bug referente a mensagem 'Transaction amount details (subtotal, tax, shipping) must add up to specified amount total', o módulo não estava transmitindo corretamente os valores relacionado ao 'total' quando existia algum tipo de descontro aplicado ao pedido;
+
 <b>[v23 - STABLE]</b><br/>
 - Acrescentado opção na configuração do módulo cahamda 'Debug Mode' que quando habilitado gera um arquivo de log chamado 'ppplusbrasil_debug_mode.log', nele será logado todas as informações dos processos de createPayment, salvando dados de todos os parametros utilizado durante o processo;
-- Correção de aplicação de desconto dentro do fluxo de Checkout transaparente.
 
 <b>[v22 - STABLE]</b><br/>
 - Log do generateUrl, responsável pela criação da URL, assim será possivel verificar quais informações a ação de criação de URL retornou (log: var/log/ppplusbrasil_controller_exception.log);
