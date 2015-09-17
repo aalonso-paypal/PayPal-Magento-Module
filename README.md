@@ -2,7 +2,7 @@
 PayPal Brazil Official Module Repositiory containing constant updated versioning
 
 
-<h2>ChangeLog<h2/>
+<h2>ChangeLog</h2>
 
 <b>[v23 - STABLE]</b><br/>
 - Acrescentado opção na configuração do módulo cahamda 'Debug Mode' que quando habilitado gera um arquivo de log chamado 'ppplusbrasil_debug_mode.log', nele será logado todas as informações dos processos de createPayment, salvando dados de todos os parametros utilizado durante o processo;
