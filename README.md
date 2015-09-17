@@ -1,4 +1,4 @@
-# PayPal-Magento-Module
+# PayPal Brazil Official Magento Module
 PayPal Brazil Official Module Repositiory containing constant updated versioning
 
 <h2>CURRENT COMPATIBILITIES</h2>
