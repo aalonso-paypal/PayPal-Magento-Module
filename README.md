@@ -11,15 +11,23 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 
 <h2>ROADMAP - FUTURE RELEASES</h2>
 <b>[CHECKOUT COMPATIBILITIES]</b>
-- Inovarti OneStepCheckout [v24].
-- FireCheckout OneStepCheckout [v25].
+- Inovarti OneStepCheckout [v25].
+- FireCheckout OneStepCheckout [v26].
 
 <b>[FEATURES]</b>
-- Shortcut Fix (Termos e Condições) [v23.2].
-- Pay with Two Cards [v26].
-- Hermes Minibrowser Compatibility [v26].
+- Pay with Two Cards [v27].
+- Hermes Minibrowser Compatibility [v27].
 
 <h2>CHANGELOG</h2>
+
+<b>[24.2 - STABLE]</b><br/>
+- Bugfix blocos relacionados ao Shortcut não estavam sendo carregados em todas as páginas no magento;
+
+<b>[24.1]</b><br/>
+- Bugfix blocos relacionados ao Shortcut não estavam sendo carregados em todas as páginas no magento;
+
+<b>[v24]</b><br/>
+- Desenvolvido modal para exibir os 'termos e condições' antes de entrar no fluxo do Shorcut;
 
 <b>[v23.1 - STABLE]</b><br/>
 - Corrigido bug referente a mensagem 'Transaction amount details (subtotal, tax, shipping) must add up to specified amount total', o módulo não estava transmitindo corretamente os valores relacionado ao 'total' quando existia algum tipo de descontro aplicado ao pedido;
