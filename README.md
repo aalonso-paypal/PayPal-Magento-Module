@@ -22,7 +22,7 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 
 <b>[24.3 - STABLE]</b><br/>
 - Bugfix, conflito encontrado na pagina do checkout moip gerado pela solução Shorcut;
-- Acrescentado no Painel de Admin, na seção de configuração do módulo PayPalPlus, campos extras para o parâmetro 'line1'. (conforme task 1);
+- Acrescentado no Painel de Admin, na seção de configuração do módulo PayPalPlus, campos extras para o parâmetro 'line1';
 - Remoção do módulo Esmart_AddressNormalization;<br/>
 <strong>Para lojas que já possuíam o módulo instalado, é necessário remover os seguinte arquivos e diretórios:</strong>       app/code/community/Esmart/AddressNormalization;
 app/design/frontend/base/default/layout/esmart/addressnormalization.xml;
