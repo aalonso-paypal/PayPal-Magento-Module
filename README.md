@@ -23,13 +23,12 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 <b>[24.3 - STABLE]</b><br/>
 - Bugfix, conflito encontrado na pagina do checkout moip gerado pela solução Shorcut;
 - Acrescentado no Painel de Admin, na seção de configuração do módulo PayPalPlus, campos extras para o parâmetro 'line1'. (conforme task 1);
-- Remoção do módulo Esmart_AddressNormalization;
-Para lojas que já possuíam o módulo instalado, é necessário remover os seguinte arquivos e diretórios:
-- app/code/community/Esmart/AddressNormalization;
-- app/design/frontend/base/default/layout/esmart/addressnormalization.xml;
-- app/design/frontend/base/default/template/esmart/addressnormalization;
-- app/etc/modules/Esmart_AddressNormalization.xml;
-- app/locale/pt_BR/Esmart_AddressNormalization.csv;
+- Remoção do módulo Esmart_AddressNormalization;<br/>
+<strong>Para lojas que já possuíam o módulo instalado, é necessário remover os seguinte arquivos e diretórios:</strong>       app/code/community/Esmart/AddressNormalization;
+app/design/frontend/base/default/layout/esmart/addressnormalization.xml;
+app/design/frontend/base/default/template/esmart/addressnormalization;
+app/etc/modules/Esmart_AddressNormalization.xml;
+app/locale/pt_BR/Esmart_AddressNormalization.csv;
 
 <b>[24.2 - STABLE]</b><br/>
 - Bugfix blocos relacionados ao Shortcut não estavam sendo carregados em todas as páginas no magento;
