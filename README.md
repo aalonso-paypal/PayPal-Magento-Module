@@ -20,6 +20,9 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 
 <h2>CHANGELOG</h2>
 
+<b>[24.4 - STABLE]</b><br/>
+- Remoção de handle duplicado no layout.xml;
+
 <b>[24.3 - STABLE]</b><br/>
 - Bugfix, conflito encontrado na pagina do checkout moip gerado pela solução Shorcut;
 - Acrescentado no Painel de Admin, na seção de configuração do módulo PayPalPlus, campos extras para o parâmetro 'line1';
