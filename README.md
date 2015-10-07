@@ -8,10 +8,10 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 <b>[CHECKOUT VERSIONS]</b>
 - Default OnePage.
 - MOIP OneStepCheckout.
+- Inorvarti OneStepCheckout.
 
 <h2>ROADMAP - FUTURE RELEASES</h2>
 <b>[CHECKOUT COMPATIBILITIES]</b>
-- Inovarti OneStepCheckout [v25].
 - FireCheckout OneStepCheckout [v26].
 
 <b>[FEATURES]</b>
@@ -19,6 +19,12 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 - Hermes Minibrowser Compatibility [v27].
 
 <h2>CHANGELOG</h2>
+
+<b>[25.1 - STABLE]</b><br/>
+- Bug fix na atualização de dados de retorno no checkout padrão e shortcut dados de nome, sobrenome, email e  cpf estavam sendo sobrescritos;
+
+<b>[25 - STABLE]</b><br/>
+- Integração com OSC Inovarti;
 
 <b>[24.4 - STABLE]</b><br/>
 - Remoção de handle duplicado no layout.xml;
