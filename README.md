@@ -20,6 +20,9 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 
 <h2>CHANGELOG</h2>
 
+<b>[25.2 - STABLE]</b><br/>
+- Bugfix relacionado a jQuery.
+
 <b>[25.1 - STABLE]</b><br/>
 - Bug fix na atualização de dados de retorno no checkout padrão e shortcut dados de nome, sobrenome, email e  cpf estavam sendo sobrescritos;
 
