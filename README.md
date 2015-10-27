@@ -20,6 +20,9 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 
 <h2>CHANGELOG</h2>
 
+<b>[25.3 - STABLE]</b><br/>
+- Correção de problemas de conflito com jQuery.
+
 <b>[25.2 - STABLE]</b><br/>
 - Bugfix relacionado a jQuery.
 
