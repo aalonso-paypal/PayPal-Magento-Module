@@ -9,7 +9,7 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 - Default OnePage.
 - MOIP OneStepCheckout.
 - Inorvarti OneStepCheckout.
- - FireCheckout OneStepCheckout.
+- FireCheckout OneStepCheckout.
 
 <h2>ROADMAP - FUTURE RELEASES</h2>
 <b>[CHECKOUT COMPATIBILITIES]</b>
