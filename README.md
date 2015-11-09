@@ -9,16 +9,20 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 - Default OnePage.
 - MOIP OneStepCheckout.
 - Inorvarti OneStepCheckout.
+ - FireCheckout OneStepCheckout
 
 <h2>ROADMAP - FUTURE RELEASES</h2>
 <b>[CHECKOUT COMPATIBILITIES]</b>
 - FireCheckout OneStepCheckout [v26].
 
 <b>[FEATURES]</b>
-- Pay with Two Cards [v27].
 - Hermes Minibrowser Compatibility [v27].
+- Pay with Two Cards [v28].
 
 <h2>CHANGELOG</h2>
+
+<b>[26 - BETA]</b><br/>
+- Compatibilidade com FireCheckout.
 
 <b>[25.3 - STABLE]</b><br/>
 - Correção de problemas de conflito com jQuery.
