@@ -53,12 +53,6 @@
 
 	<PayPalBrasil_SHORTCUT_popup>
 		<reference name="head">
-			<action method="addJs">
-				<script>lib/jquery/jquery-1.10.2.min.j</script>
-			</action>
-			<action method="addJs">
-				<script>lib/jquery/noconflict.j</script>
-			</action>
 			<action method="addCss">
 				<name>esmart/paypalbrasil/css/styles.css</name>
 			</action>
