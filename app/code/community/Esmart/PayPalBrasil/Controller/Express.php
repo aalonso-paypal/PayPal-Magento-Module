@@ -168,6 +168,11 @@ class Esmart_PayPalBrasil_Controller_Express extends Mage_Paypal_Controller_Expr
                 $this->_getQuote()->setBillingAddress($exportedShippingAddress);
             }
 
+            $this->_getQuote()->setCustomerEmail($this->_getApi()->getEmail())
+                              ->setCustomerTaxvat($this->_getApi()->getBuyerTaxId())
+                              ->setCustomerFirstname($exportedShippingAddress->getFirstname())
+                              ->setCustomerLastname($exportedShippingAddress->getLastname());
+
             $shippingMethod = null;
 
             /**
