@@ -259,13 +259,12 @@ class Esmart_PayPalBrasil_Model_Plus extends Mage_Payment_Model_Method_Abstract
 
         try {
             $payment->create($this->getApiContext());
-
             $quote->getPayment()
                 ->setAdditionalInformation('paypal_plus_payment_id', $payment->getId())
                 ->setAdditionalInformation('paypal_plus_payment_state', $payment->getState())
                 ->save();
         } catch (Exception $e) {
-            $helper->logException(__FILE__, __CLASS__, __FUNCTION__, __LINE__, self::LOG_FILENAME, $e);
+            $helper->logException($e->getFile(), __CLASS__, __FUNCTION__, $e->getLine(), self::LOG_FILENAME, $e);
         }
 
         return $payment;

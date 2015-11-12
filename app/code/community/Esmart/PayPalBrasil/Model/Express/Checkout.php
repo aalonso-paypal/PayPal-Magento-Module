@@ -97,10 +97,6 @@ class Esmart_PayPalBrasil_Model_Express_Checkout extends Mage_Paypal_Model_Expre
         $this->_api->setToken($token)
             ->callGetExpressCheckoutDetails();
         $quote = $this->_quote;
-        $infoButton = 'button';
-        if (defined('self::PAYMENT_INFO_BUTTON')) {
-            $infoButton = self::PAYMENT_INFO_BUTTON;
-        }
 
         // $this->_ignoreAddressValidation();
         $this->_quote->getBillingAddress()->setShouldIgnoreValidation(true);
@@ -117,7 +113,7 @@ class Esmart_PayPalBrasil_Model_Express_Checkout extends Mage_Paypal_Model_Expre
             $shippingAddress = $quote->getShippingAddress();
             if ($shippingAddress) {
                 if ($exportedShippingAddress
-                    && $quote->getPayment()->getAdditionalInformation($infoButton) == 1
+                    && $quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON) == 1
                 ) {
                     $this->_setExportedAddressData($shippingAddress, $exportedShippingAddress);
                     // PayPal doesn't provide detailed shipping info: prefix, middlename, lastname, suffix
@@ -145,7 +141,7 @@ class Esmart_PayPalBrasil_Model_Express_Checkout extends Mage_Paypal_Model_Expre
         }
 
         // import billing address
-        $portBillingFromShipping = $quote->getPayment()->getAdditionalInformation($infoButton) == 1
+        $portBillingFromShipping = $quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON) == 1
             && $this->_config->requireBillingAddress != Mage_Paypal_Model_Config::REQUIRE_BILLING_ADDRESS_ALL
             && !$quote->isVirtual();
         if ($portBillingFromShipping) {
