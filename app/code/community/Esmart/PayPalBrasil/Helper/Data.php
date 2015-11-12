@@ -48,12 +48,6 @@ class Esmart_PayPalBrasil_Helper_Data extends Mage_Core_Helper_Data
     const JS_EVENTS_INOVARTI = 'esmart/paypalbrasil/Esmart_PaypalBrasil.events.inovarti.js';
 
     /**
-     * JS events INOVARTI
-     * @const string
-     */
-    const JS_EVENTS_FIRECHECKOUT = 'esmart/paypalbrasil/Esmart_PaypalBrasil.events.firecheckout.js';
-
-    /**
      * @var string
      */
     protected $_ppbUrl = 'https://www.paypal-brasil.com.br';
@@ -234,7 +228,6 @@ class Esmart_PayPalBrasil_Helper_Data extends Mage_Core_Helper_Data
         $oscSolutions = array(
             'MOIP_Onestepcheckout'     => self::JS_EVENTS_MOIP,
             'Inovarti_Onestepcheckout' => self::JS_EVENTS_INOVARTI,
-            'TM_FireCheckout'          => self::JS_EVENTS_FIRECHECKOUT,
         );
 
         foreach ($oscSolutions as $solution => $fileEvent) {

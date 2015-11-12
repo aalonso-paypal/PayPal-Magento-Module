@@ -96,22 +96,20 @@ if (typeof EsmartPaypalBrasilPPPlus !== 'object') {
                         cards           : []
                     };
 
-                    if (undefined != data.result.payer.funding_option) {
-                        for (key in data.result.payer.funding_option.funding_sources) {
-                            if (Number(key) == key) {
-                                var cardData = {
-                                    termQty     : 1,
-                                    termValue   : data.result.payer.funding_option.funding_sources[key].amount.value,
-                                    total       : data.result.payer.funding_option.funding_sources[key].amount.value
-                                };
+                    for (key in data.result.payer.funding_option.funding_sources) {
+                        if (Number(key) == key) {
+                            var cardData = {
+                                termQty     : 1,
+                                termValue   : data.result.payer.funding_option.funding_sources[key].amount.value,
+                                total       : data.result.payer.funding_option.funding_sources[key].amount.value
+                            };
 
-                                if (typeof data.result.term !== 'undefined') {
-                                    cardData.termQty    = data.result.term.term;
-                                    cardData.termValue  = data.result.term.monthly_payment.value;
-                                }
-
-                                dataPost.cards.push(cardData);
+                            if (typeof data.result.term !== 'undefined') {
+                                cardData.termQty    = data.result.term.term;
+                                cardData.termValue  = data.result.term.monthly_payment.value;
                             }
+
+                            dataPost.cards.push(cardData);
                         }
                     }
 
