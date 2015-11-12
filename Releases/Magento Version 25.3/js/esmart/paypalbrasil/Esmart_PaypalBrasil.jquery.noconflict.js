@@ -1,1 +1,0 @@
-var $jPPPlus = jQuery.noConflict();
