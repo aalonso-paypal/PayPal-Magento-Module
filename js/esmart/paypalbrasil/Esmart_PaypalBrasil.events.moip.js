@@ -1,12 +1,12 @@
-$jPPPlus(document).ready(function () {
+jQuery(document).ready(function () {
 
     EsmartPaypalBrasilBtnContinue.setElement('#checkout-onepage-buttom', '#onestepcheckout_place_order_button');
 
-    $jPPPlus("input[type=radio][name='payment[method]']").unbind('change').change(function (e) {
+    jQuery("input[type=radio][name='payment[method]']").unbind('change').change(function (e) {
         e.preventDefault();
 
         if (this.value == 'paypal_plus') {
-            $jPPPlus('#ppplus').removeAttr('style').html('');
+            jQuery('#ppplus').removeAttr('style').html('');
             if (!EsmartPaypalBrasilPPPlus.requestPending) {
                 setTimeout(function () {
                     EsmartPaypalBrasilPPPlus.generateUrl();
@@ -15,7 +15,7 @@ $jPPPlus(document).ready(function () {
         }
     });
 
-    $jPPPlus("input[type=radio][name='payment[method]'][value='paypal_plus']:checked").attr('checked', false);
+    jQuery("input[type=radio][name='payment[method]'][value='paypal_plus']:checked").attr('checked', false);
 
     EsmartPaypalBrasilPPPlus.init();
 });

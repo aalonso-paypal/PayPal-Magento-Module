@@ -51,32 +51,32 @@ $loaderId = $loader->getLoaderId();
 
         Event.observe('<?php echo $shortcutHtmlId ?>', 'click', function(event) {
             if (confirm('<?php echo Mage::helper('core')->jsQuoteEscape($this->getConfirmationMessage())?>')) {
-                var checkboxes = $jPPPlus('.agree input[type="checkbox"]').length;
+                var checkboxes = jQuery('.agree input[type="checkbox"]').length;
 
                 if (checkboxes == 0) {
                     EsmartPayPalBrasilProcessedCheckout();
                     return true;
                 }
 
-                $jPPPlus(".agreementsAction").trigger('click');
+                jQuery(".agreementsAction").trigger('click');
             }
         });
 
         function EsmartPayPalBrasilProcessedCheckout() {
             var confirmationUrl = '<?php echo $this->getConfirmationUrl() ?>';
 
-            var checkboxes = $jPPPlus('.agree input[type="checkbox"]').length;
-            var checkboxesChecked = $jPPPlus('.agree input[type="checkbox"]:checked').length;
+            var checkboxes = jQuery('.agree input[type="checkbox"]').length;
+            var checkboxesChecked = jQuery('.agree input[type="checkbox"]:checked').length;
             if (checkboxes > checkboxesChecked) {
                 alert('<?php echo $this->__('Please agree to all Terms and Conditions before placing the order.')?>');
                 return false;
             }
 
-            $jPPPlus('<?php echo $loaderId ?>').show();
+            jQuery('<?php echo $loaderId ?>').show();
 
             <?php if ($this->getIsInCatalogProduct()): ?>
-            $jPPPlus('pp_checkout_url').value = confirmationUrl;
-            productAddToCartForm.submit($jPPPlus('#product_addtocart_form'));
+            jQuery('pp_checkout_url').value = confirmationUrl;
+            productAddToCartForm.submit(jQuery('#product_addtocart_form'));
             <?php else: ?>
             window.location = confirmationUrl;
             <?php endif; ?>

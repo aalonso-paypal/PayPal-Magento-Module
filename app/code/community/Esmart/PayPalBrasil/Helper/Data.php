@@ -27,7 +27,7 @@ class Esmart_PayPalBrasil_Helper_Data extends Mage_Core_Helper_Data
      * Base Script content
      * @const
      */
-    const JS_BASE = '<script type="text/javascript">$jPPPlus.getScript("%s"); EsmartPaypalBrasilPPPlus.base_url = "%s";</script>';
+    const JS_BASE = '<script type="text/javascript">jQuery.getScript("%s"); EsmartPaypalBrasilPPPlus.base_url = "%s";</script>';
 
     /**
      * JS events default

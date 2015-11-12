@@ -157,10 +157,15 @@ class Esmart_PayPalBrasil_Controller_Express extends Mage_Paypal_Controller_Expr
             if ($this->_getApi()->getEmail()) {
                 $customer = Mage::getModel('customer/customer');
                 $customer->setWebsiteId(Mage::app()->getWebsite()->getId())
-                    ->loadByEmail($this->_getApi()->getEmail());
+                         ->loadByEmail($this->_getApi()->getEmail());
                 if ($customer->getId()) {
                     $isCustomerNew = false;
                 }
+            }
+
+            $exportedShippingAddress = $this->_getApi()->getExportedShippingAddress();
+            if ($exportedShippingAddress) {
+                $this->_getQuote()->setBillingAddress($exportedShippingAddress);
             }
 
             $shippingMethod = null;
@@ -192,8 +197,8 @@ class Esmart_PayPalBrasil_Controller_Express extends Mage_Paypal_Controller_Expr
                 if (!is_null($shippingMethod)) {
                     // possible bug of double collecting rates :-/
                     $shippingAddress->setShippingMethod($shippingMethod)
-                        ->setCollectShippingRates(true)
-                        ->save();
+                                    ->setCollectShippingRates(true)
+                                    ->save();
                 }
             }
 
@@ -302,7 +307,7 @@ class Esmart_PayPalBrasil_Controller_Express extends Mage_Paypal_Controller_Expr
                 $postedAgreements = array_keys($this->getRequest()->getPost('agreement', array()));
                 if (array_diff($requiredAgreements, $postedAgreements)) {
                     Mage::throwException(Mage::helper('paypal')->__(
-                        'Please agree to all the terms and conditions before placing the order.')
+                            'Please agree to all the terms and conditions before placing the order.')
                     );
                 }
             }
