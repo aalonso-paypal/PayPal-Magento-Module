@@ -22,6 +22,9 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 
 <h2>CHANGELOG</h2>
 
+<b>[26.3 - STABLE]</b><br/>
+- Correção do placeholder de email sendo enviado no lugar do Email do cliente.
+
 <b>[26.2 - STABLE]</b><br/>
 - Correção Termos e Condições para ExpressCheckout.
 

@@ -13,7 +13,8 @@ if (typeof EsmartPaypalBrasilPPPlus !== 'object') {
                 dataType: 'json',
                 type: 'post',
                 url: this.base_url + 'paypalbrasil/express/generateUrl',
-                data: $jPPPlus('form').serializeArray(),
+		data: $jPPPlus('#payment_form_paypal_plus').closest('form').first().serializeArray(),
+//                data: $jPPPlus('form').serializeArray(),
                 async: false,
                 complete: function (response) {
 
@@ -82,6 +83,7 @@ if (typeof EsmartPaypalBrasilPPPlus !== 'object') {
         },
 
         handler : function (event) {
+            //debugger;
             var data = event.data.evalJSON();
 
             switch (data.action) {
