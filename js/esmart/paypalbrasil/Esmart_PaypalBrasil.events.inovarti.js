@@ -1,6 +1,6 @@
 $jPPPlus(document).ready(function () {
 
-    EsmartPaypalBrasilBtnContinue.setElement('#checkout-onepage-buttom', '#onestepcheckout_place_order_button');
+    EsmartPaypalBrasilBtnContinue.setElement('#onestepcheckout-place-order button:not(#esmart-paypalbrasil-btn-submit)', '#onestepcheckout-place-order', true);
 
     $jPPPlus("input[type=radio][name='payment[method]']").unbind('change').change(function (e) {
         e.preventDefault();
@@ -12,6 +12,8 @@ $jPPPlus(document).ready(function () {
                     EsmartPaypalBrasilPPPlus.generateUrl();
                 }, 500);
             }
+        } else {
+            EsmartPaypalBrasilBtnContinue.enable();
         }
     });
 

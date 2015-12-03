@@ -27,7 +27,7 @@ class Esmart_PayPalBrasil_Helper_Data extends Mage_Core_Helper_Data
      * Base Script content
      * @const
      */
-    const JS_BASE = '<script type="text/javascript">jQuery.getScript("%s"); EsmartPaypalBrasilPPPlus.base_url = "%s";</script>';
+    const JS_BASE = '<script type="text/javascript">$jPPPlus.getScript("%s"); EsmartPaypalBrasilPPPlus.base_url = "%s";</script>';
 
     /**
      * JS events default
@@ -40,6 +40,18 @@ class Esmart_PayPalBrasil_Helper_Data extends Mage_Core_Helper_Data
      * @const string
      */
     const JS_EVENTS_MOIP = 'esmart/paypalbrasil/Esmart_PaypalBrasil.events.moip.js';
+
+    /**
+     * JS events INOVARTI
+     * @const string
+     */
+    const JS_EVENTS_INOVARTI = 'esmart/paypalbrasil/Esmart_PaypalBrasil.events.inovarti.js';
+
+    /**
+     * JS events INOVARTI
+     * @const string
+     */
+    const JS_EVENTS_FIRECHECKOUT = 'esmart/paypalbrasil/Esmart_PaypalBrasil.events.firecheckout.js';
 
     /**
      * @var string
@@ -198,7 +210,11 @@ class Esmart_PayPalBrasil_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getEventsScriptBlock()
     {
-        return sprintf(self::JS_BASE, $this->getCheckoutType(), Mage::getBaseUrl());
+        return sprintf(
+            self::JS_BASE,
+            $this->getCheckoutType(),
+            Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK, true)
+        );
     }
 
     /**
@@ -220,7 +236,9 @@ class Esmart_PayPalBrasil_Helper_Data extends Mage_Core_Helper_Data
         $modulesArray = (array) $modules;
 
         $oscSolutions = array(
-            'MOIP_Onestepcheckout' => self::JS_EVENTS_MOIP,
+            'MOIP_Onestepcheckout'     => self::JS_EVENTS_MOIP,
+            'Inovarti_Onestepcheckout' => self::JS_EVENTS_INOVARTI,
+            'TM_FireCheckout'          => self::JS_EVENTS_FIRECHECKOUT,
         );
 
         foreach ($oscSolutions as $solution => $fileEvent) {

@@ -157,21 +157,11 @@ class Esmart_PayPalBrasil_Controller_Express extends Mage_Paypal_Controller_Expr
             if ($this->_getApi()->getEmail()) {
                 $customer = Mage::getModel('customer/customer');
                 $customer->setWebsiteId(Mage::app()->getWebsite()->getId())
-                         ->loadByEmail($this->_getApi()->getEmail());
+                    ->loadByEmail($this->_getApi()->getEmail());
                 if ($customer->getId()) {
                     $isCustomerNew = false;
                 }
             }
-
-            $exportedShippingAddress = $this->_getApi()->getExportedShippingAddress();
-            if ($exportedShippingAddress) {
-                $this->_getQuote()->setBillingAddress($exportedShippingAddress);
-            }
-
-            $this->_getQuote()->setCustomerEmail($this->_getApi()->getEmail())
-                              ->setCustomerTaxvat($this->_getApi()->getBuyerTaxId())
-                              ->setCustomerFirstname($exportedShippingAddress->getFirstname())
-                              ->setCustomerLastname($exportedShippingAddress->getLastname());
 
             $shippingMethod = null;
 
@@ -202,8 +192,8 @@ class Esmart_PayPalBrasil_Controller_Express extends Mage_Paypal_Controller_Expr
                 if (!is_null($shippingMethod)) {
                     // possible bug of double collecting rates :-/
                     $shippingAddress->setShippingMethod($shippingMethod)
-                                    ->setCollectShippingRates(true)
-                                    ->save();
+                        ->setCollectShippingRates(true)
+                        ->save();
                 }
             }
 
@@ -220,7 +210,9 @@ class Esmart_PayPalBrasil_Controller_Express extends Mage_Paypal_Controller_Expr
              * If there's a shipping method already set to ShippingAddres then avoid the paypal/express/review page
              * and place the order.
              */
-            $requiredAgreements = Mage::helper('checkout')->getRequiredAgreementIds();
+            //Obsolete since PayPal return never send POST values/parameters, and agreement will never populated here
+            /*
+             $requiredAgreements = Mage::helper('checkout')->getRequiredAgreementIds();
             if ($requiredAgreements) {
                 $postedAgreements = array_keys($this->getRequest()->getPost('agreement', array()));
                 if (array_diff($requiredAgreements, $postedAgreements)) {
@@ -231,6 +223,7 @@ class Esmart_PayPalBrasil_Controller_Express extends Mage_Paypal_Controller_Expr
                     );
                 }
             }
+            */
 
             /**
              * Places the Order
@@ -312,7 +305,7 @@ class Esmart_PayPalBrasil_Controller_Express extends Mage_Paypal_Controller_Expr
                 $postedAgreements = array_keys($this->getRequest()->getPost('agreement', array()));
                 if (array_diff($requiredAgreements, $postedAgreements)) {
                     Mage::throwException(Mage::helper('paypal')->__(
-                            'Please agree to all the terms and conditions before placing the order.')
+                        'Please agree to all the terms and conditions before placing the order.')
                     );
                 }
             }

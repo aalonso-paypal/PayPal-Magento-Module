@@ -70,36 +70,6 @@ class Esmart_PayPalBrasil_Model_Observer
     }
 
     /**
-     * Added jQuery library.
-     *
-     * @param Varien_Event_Observer $observer
-     *
-     * @return string
-     */
-    public function prepareLayoutBefore(Varien_Event_Observer $observer)
-    {
-        if (!Mage::getStoreConfig('payment/paypal_plus/active')) {
-            return $this;
-        }
-
-        $versionInfo = Mage::getVersionInfo();
-
-        if ($versionInfo['minor'] > 8) {
-            return $this;
-        }
-
-        /* @var $block Mage_Page_Block_Html_Head */
-        $block = $observer->getEvent()->getBlock();
-
-        if ("head" == $block->getNameInLayout()) {
-            $block->addJs('lib/jquery/jquery-1.10.2.min.js');
-            $block->addJs('lib/jquery/noconflict.js');
-        }
-
-        return $this;
-    }
-
-    /**
      * Append JS event after block Form
      *
      * @param $observer

@@ -1,6 +1,6 @@
 $jPPPlus(document).ready(function () {
 
-    EsmartPaypalBrasilBtnContinue.setElement('#checkout-onepage-buttom', '#onestepcheckout_place_order_button');
+    EsmartPaypalBrasilBtnContinue.setElement('#review-buttons-container button:not(#esmart-paypalbrasil-btn-submit)', '#review-buttons-container');
 
     $jPPPlus("input[type=radio][name='payment[method]']").unbind('change').change(function (e) {
         e.preventDefault();

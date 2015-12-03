@@ -6,33 +6,33 @@ if (typeof EsmartPaypalBrasilPPPlus !== 'object') {
         base_url        : null,
 
         generateUrl : function () {
-            jQuery("div#paypal_plus_loading").show();
-            jQuery('#paypal_plus_iframe').html('').removeAttr('style');
+            $jPPPlus("div#paypal_plus_loading").show();
+            $jPPPlus('#paypal_plus_iframe').html('').removeAttr('style');
 
-            jQuery.ajax({
+            $jPPPlus.ajax({
                 dataType: 'json',
                 type: 'post',
                 url: this.base_url + 'paypalbrasil/express/generateUrl',
-                data: jQuery('form').serializeArray(),
+                data: $jPPPlus('form').serializeArray(),
                 async: false,
                 complete: function (response) {
 
-                    var responseContent = jQuery.parseJSON(response.responseText);
+                    var responseContent = $jPPPlus.parseJSON(response.responseText);
 
                     if (typeof responseContent.error !== 'undefined') {
                         if (responseContent.error == 'incomplete_customer') {
                             EsmartPaypalBrasilPPPlus.showAlert();
                         }
 
-                        jQuery("div#paypal_plus_loading").hide();
-                        jQuery("input[type=radio][name='payment[method]'][value='paypal_plus']:checked").attr('checked', false);
+                        $jPPPlus("div#paypal_plus_loading").hide();
+                        $jPPPlus("input[type=radio][name='payment[method]'][value='paypal_plus']:checked").attr('checked', false);
                         return false;
                     }
 
                     if (responseContent.success.approvalUrl === null) {
-                        jQuery("div#paypal_plus_loading").hide();
+                        $jPPPlus("div#paypal_plus_loading").hide();
                         EsmartPaypalBrasilPPPlus.showAlert();
-                        jQuery("input[type=radio][name='payment[method]'][value='paypal_plus']:checked").attr('checked', false);
+                        $jPPPlus("input[type=radio][name='payment[method]'][value='paypal_plus']:checked").attr('checked', false);
                         return false;
                     }
 
@@ -58,7 +58,7 @@ if (typeof EsmartPaypalBrasilPPPlus !== 'object') {
                             rememberedCards    : responseContent.success.rememberedCards
                         });
 
-                        jQuery("div#paypal_plus_loading").hide();
+                        $jPPPlus("div#paypal_plus_loading").hide();
                         return true;
                     }
                 }
@@ -96,24 +96,26 @@ if (typeof EsmartPaypalBrasilPPPlus !== 'object') {
                         cards           : []
                     };
 
-                    for (key in data.result.payer.funding_option.funding_sources) {
-                        if (Number(key) == key) {
-                            var cardData = {
-                                termQty     : 1,
-                                termValue   : data.result.payer.funding_option.funding_sources[key].amount.value,
-                                total       : data.result.payer.funding_option.funding_sources[key].amount.value
-                            };
+                    if (undefined != data.result.payer.funding_option) {
+                        for (key in data.result.payer.funding_option.funding_sources) {
+                            if (Number(key) == key) {
+                                var cardData = {
+                                    termQty     : 1,
+                                    termValue   : data.result.payer.funding_option.funding_sources[key].amount.value,
+                                    total       : data.result.payer.funding_option.funding_sources[key].amount.value
+                                };
 
-                            if (typeof data.result.term !== 'undefined') {
-                                cardData.termQty    = data.result.term.term;
-                                cardData.termValue  = data.result.term.monthly_payment.value;
+                                if (typeof data.result.term !== 'undefined') {
+                                    cardData.termQty    = data.result.term.term;
+                                    cardData.termValue  = data.result.term.monthly_payment.value;
+                                }
+
+                                dataPost.cards.push(cardData);
                             }
-
-                            dataPost.cards.push(cardData);
                         }
                     }
 
-                    jQuery.ajax({
+                    $jPPPlus.ajax({
                         dataType    : 'json',
                         type        : 'post',
                         url         : this.base_url + 'paypalbrasil/express/savePaypalInformation',
@@ -148,7 +150,7 @@ if (typeof EsmartPaypalBrasilBtnContinue !== 'object') {
         },
 
         executeOriginalEvents: function () {
-            jQuery('#original-btn-submit').trigger('click');
+            $jPPPlus('#original-btn-submit').trigger('click');
         },
 
         setElement: function (originalBtnElement, appendTo, removeEvents) {
@@ -156,12 +158,12 @@ if (typeof EsmartPaypalBrasilBtnContinue !== 'object') {
                 removeEvents = false;
             }
 
-            if (jQuery('#original-btn-submit').size() === 0) {
-                jQuery(originalBtnElement).clone().attr('id', 'esmart-paypalbrasil-btn-submit').appendTo(appendTo);
+            if ($jPPPlus('#original-btn-submit').size() === 0) {
+                $jPPPlus(originalBtnElement).clone().attr('id', 'esmart-paypalbrasil-btn-submit').appendTo(appendTo);
 
-                this.element = jQuery('#esmart-paypalbrasil-btn-submit');
+                this.element = $jPPPlus('#esmart-paypalbrasil-btn-submit');
 
-                jQuery(originalBtnElement).attr('style', '').attr('class', '').attr('id', 'original-btn-submit').hide();
+                $jPPPlus(originalBtnElement).attr('style', '').attr('class', '').attr('id', 'original-btn-submit').hide();
 
                 if (removeEvents) {
                     this.element.removeAttr('onclick');
@@ -174,7 +176,7 @@ if (typeof EsmartPaypalBrasilBtnContinue !== 'object') {
 
                     e.preventDefault();
 
-                    if (jQuery("input[type=radio][name='payment[method]']:checked").val() === 'paypal_plus') {
+                    if ($jPPPlus("input[type=radio][name='payment[method]']:checked").val() === 'paypal_plus') {
                         EsmartPaypalBrasilPPPlus.ppp.doContinue();
                     } else {
                         EsmartPaypalBrasilBtnContinue.executeOriginalEvents();

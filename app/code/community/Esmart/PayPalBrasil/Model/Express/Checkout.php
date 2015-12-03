@@ -83,4 +83,94 @@ class Esmart_PayPalBrasil_Model_Express_Checkout extends Mage_Paypal_Model_Expre
         return Mage::helper('esmart_paypalbrasil');
     }
 
+    /**
+     * Update quote when returned from PayPal
+     * rewrite billing address by paypal
+     * save old billing address for new customer
+     * export shipping address in case address absence
+     *
+     * @param string $token
+     */
+    public function returnFromPaypal($token)
+    {
+        $this->_getApi();
+        $this->_api->setToken($token)
+            ->callGetExpressCheckoutDetails();
+        $quote = $this->_quote;
+        $infoButton = 'button';
+        if (defined('self::PAYMENT_INFO_BUTTON')) {
+            $infoButton = self::PAYMENT_INFO_BUTTON;
+        }
+
+        // $this->_ignoreAddressValidation();
+        $this->_quote->getBillingAddress()->setShouldIgnoreValidation(true);
+        if (!$this->_quote->getIsVirtual()) {
+            $this->_quote->getShippingAddress()->setShouldIgnoreValidation(true);
+            if (!$this->_config->requireBillingAddress && !$this->_quote->getBillingAddress()->getEmail()) {
+                $this->_quote->getBillingAddress()->setSameAsBilling(1);
+            }
+        }
+
+        // import shipping address
+        $exportedShippingAddress = $this->_api->getExportedShippingAddress();
+        if (!$quote->getIsVirtual()) {
+            $shippingAddress = $quote->getShippingAddress();
+            if ($shippingAddress) {
+                if ($exportedShippingAddress
+                    && $quote->getPayment()->getAdditionalInformation($infoButton) == 1
+                ) {
+                    $this->_setExportedAddressData($shippingAddress, $exportedShippingAddress);
+                    // PayPal doesn't provide detailed shipping info: prefix, middlename, lastname, suffix
+                    $shippingAddress->setPrefix(null);
+                    $shippingAddress->setMiddlename(null);
+                    $shippingAddress->setLastname(null);
+                    $shippingAddress->setSuffix(null);
+                    $shippingAddress->setCollectShippingRates(true);
+                    $shippingAddress->setSameAsBilling(0);
+                }
+
+                // import shipping method
+                $code = '';
+                if ($this->_api->getShippingRateCode()) {
+                    if ($code = $this->_matchShippingMethodCode($shippingAddress, $this->_api->getShippingRateCode())) {
+                        // possible bug of double collecting rates :-/
+                        $shippingAddress->setShippingMethod($code)->setCollectShippingRates(true);
+                    }
+                }
+                $quote->getPayment()->setAdditionalInformation(
+                    self::PAYMENT_INFO_TRANSPORT_SHIPPING_METHOD,
+                    $code
+                );
+            }
+        }
+
+        // import billing address
+        $portBillingFromShipping = $quote->getPayment()->getAdditionalInformation($infoButton) == 1
+            && $this->_config->requireBillingAddress != Mage_Paypal_Model_Config::REQUIRE_BILLING_ADDRESS_ALL
+            && !$quote->isVirtual();
+        if ($portBillingFromShipping) {
+            $billingAddress = clone $shippingAddress;
+            $billingAddress->unsAddressId()
+                ->unsAddressType();
+            $data = $billingAddress->getData();
+            $data['save_in_address_book'] = 0;
+            $quote->getBillingAddress()->addData($data);
+            $quote->getShippingAddress()->setSameAsBilling(1);
+        } else {
+            $billingAddress = $quote->getBillingAddress();
+        }
+        $exportedBillingAddress = $this->_api->getExportedBillingAddress();
+        //$this->_setExportedAddressData($billingAddress, $exportedBillingAddress);
+        $billingAddress->setCustomerNotes($exportedBillingAddress->getData('note'));
+        $quote->setBillingAddress($billingAddress);
+
+        // import payment info
+        $payment = $quote->getPayment();
+        $payment->setMethod($this->_methodType);
+        Mage::getSingleton('paypal/info')->importToPayment($this->_api, $payment);
+        $payment->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_PAYER_ID, $this->_api->getPayerId())
+            ->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_TOKEN, $token)
+        ;
+        $quote->collectTotals()->save();
+    }
 }

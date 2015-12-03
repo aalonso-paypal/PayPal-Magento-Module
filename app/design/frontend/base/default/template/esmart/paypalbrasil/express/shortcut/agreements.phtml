@@ -37,8 +37,8 @@
 
 <script>
 
-    jQuery(document).ready(function () {
-        jQuery(".agreementsAction").fancybox({
+    $jPPPlus(document).ready(function () {
+        $jPPPlus(".agreementsAction").fancybox({
             maxWidth    : 800,
             maxHeight   : 600,
             fitToView   : false,
@@ -50,7 +50,7 @@
             closeEffect : 'none'
         });
 
-        jQuery('#agreementsContinue').click(function(e){
+        $jPPPlus('#agreementsContinue').click(function(e){
             EsmartPayPalBrasilProcessedCheckout();
         });
     });

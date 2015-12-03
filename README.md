@@ -22,6 +22,9 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 
 <h2>CHANGELOG</h2>
 
+<b>[26.2 - STABLE]</b><br/>
+- Correção Termos e Condições para ExpressCheckout.
+
 <b>[26.1 - STABLE]</b><br/>
 - Correção de constante não existente, que ocorre em versões antigas do modulo principal do Paypal.
 

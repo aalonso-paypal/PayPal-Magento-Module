@@ -45,44 +45,41 @@ $loaderId = $loader->getLoaderId();
         <input type="hidden" id="pp_checkout_url" name="return_url" value="" />
     <?php endif; ?>
 
-    <?php if ($this->getConfirmationUrl()): ?>
-    <script type="text/javascript">
-    //<![CDATA[
 
-        Event.observe('<?php echo $shortcutHtmlId ?>', 'click', function(event) {
-            if (confirm('<?php echo Mage::helper('core')->jsQuoteEscape($this->getConfirmationMessage())?>')) {
-                var checkboxes = jQuery('.agree input[type="checkbox"]').length;
-
-                if (checkboxes == 0) {
-                    EsmartPayPalBrasilProcessedCheckout();
-                    return true;
-                }
-
-                jQuery(".agreementsAction").trigger('click');
-            }
-        });
-
-        function EsmartPayPalBrasilProcessedCheckout() {
-            var confirmationUrl = '<?php echo $this->getConfirmationUrl() ?>';
-
-            var checkboxes = jQuery('.agree input[type="checkbox"]').length;
-            var checkboxesChecked = jQuery('.agree input[type="checkbox"]:checked').length;
-            if (checkboxes > checkboxesChecked) {
-                alert('<?php echo $this->__('Please agree to all Terms and Conditions before placing the order.')?>');
-                return false;
-            }
-
-            jQuery('<?php echo $loaderId ?>').show();
-
-            <?php if ($this->getIsInCatalogProduct()): ?>
-            jQuery('pp_checkout_url').value = confirmationUrl;
-            productAddToCartForm.submit(jQuery('#product_addtocart_form'));
-            <?php else: ?>
-            window.location = confirmationUrl;
-            <?php endif; ?>
-        }
-    //]]>
-    </script>
-    <?php endif; ?>
 <?php endif; ?>
 </p>
+<script type="text/javascript">
+    //<![CDATA[
+
+    Event.observe('<?php echo $shortcutHtmlId ?>', 'click', function(event) {
+        var checkboxes = $jPPPlus('.agree input[type="checkbox"]').length;
+
+        if (checkboxes == 0) {
+            EsmartPayPalBrasilProcessedCheckout();
+            return true;
+        }
+
+        $jPPPlus(".agreementsAction").trigger('click');
+    });
+
+    function EsmartPayPalBrasilProcessedCheckout() {
+        var confirmationUrl = '<?php echo $this->getCheckoutUrl() ?>';
+
+        var checkboxes = $jPPPlus('.agree input[type="checkbox"]').length;
+        var checkboxesChecked = $jPPPlus('.agree input[type="checkbox"]:checked').length;
+        if (checkboxes > checkboxesChecked) {
+            alert('<?php echo $this->__('Please agree to all Terms and Conditions before placing the order.')?>');
+            return false;
+        }
+
+        $jPPPlus('<?php echo $loaderId ?>').show();
+
+        <?php if ($this->getIsInCatalogProduct()): ?>
+        $jPPPlus('pp_checkout_url').value = confirmationUrl;
+        productAddToCartForm.submit($jPPPlus('#product_addtocart_form'));
+        <?php else: ?>
+        window.location = confirmationUrl;
+        <?php endif; ?>
+    }
+    //]]>
+</script>

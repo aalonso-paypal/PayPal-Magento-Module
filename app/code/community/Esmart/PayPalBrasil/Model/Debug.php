@@ -57,9 +57,13 @@ class Esmart_PayPalBrasil_Model_Debug
 
         self::$content[$type][] = $details;
 
-        foreach ($contentData as $key => $content)
-        {
-            self::$content[$type][] = "- {$key} : {$content}";
+        foreach ($contentData as $key => $content) {
+            $string = "- ";
+            $string .= is_string($key)?$key:gettype($key);
+            $string .= " : ";
+            $string .= is_string($content)?$content:gettype($content);
+
+            self::$content[$type][] = $string;
         }
 
         self::$content[$type][] = PHP_EOL;
@@ -80,6 +84,7 @@ class Esmart_PayPalBrasil_Model_Debug
 
         $finalContent = array();
         foreach (self::$content as $key => $content) {
+            $content = is_array($content) ? $content : array($content);
             $finalContent[] = implode(PHP_EOL, $content);
         }
 

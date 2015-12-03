@@ -25,7 +25,7 @@
 <config>
     <modules>
         <Esmart_PayPalBrasil>
-            <version>0.3.17.1</version>
+            <version>0.4.3.1</version>
         </Esmart_PayPalBrasil>
     </modules>
     <global>
@@ -38,14 +38,6 @@
                     </esmart_paypalbrasil>
                 </observers>
             </admin_system_config_changed_section_payment>
-            <core_block_abstract_prepare_layout_before>
-                <observers>
-                    <belvg_jquery_prepare_layout_before>
-                        <class>esmart_paypalbrasil/observer</class>
-                        <method>prepareLayoutBefore</method>
-                    </belvg_jquery_prepare_layout_before>
-                </observers>
-            </core_block_abstract_prepare_layout_before>
             <core_block_abstract_to_html_after>
                 <observers>
                     <belvg_jquery_prepare_layout_before>
