@@ -352,6 +352,10 @@ class Esmart_PayPalBrasil_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getDataFromObject($object, $nonPersistedData, $index)
     {
+        if (empty($object) || !method_exists($object, 'getData')) {
+            return null;
+        }
+
         if ($object->getData($index)) {
             return $object->getData($index);
         }
