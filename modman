@@ -1,0 +1,17 @@
+app/code/community/Esmart/PayPalBrasil                app/code/community/Esmart/PayPalBrasil
+app/design/adminhtml/default/default/layout/esmart    app/design/adminhtml/default/default/layout/esmart
+app/design/adminhtml/default/default/template/esmart  app/design/adminhtml/default/default/template/esmart
+app/design/frontend/base/default/layout/esmart        app/design/frontend/base/default/layout/esmart
+app/design/frontend/base/default/template/esmart      app/design/frontend/base/default/template/esmart
+app/etc/modules/Esmart_PayPalBrasil.xml               app/etc/modules/Esmart_PayPalBrasil.xml
+app/locale/pt_BR/Esmart_PayPalBrasil.csv              app/locale/pt_BR/Esmart_PayPalBrasil.csv
+js/esmart                                             js/esmart
+js/lib/jquery/jquery.fancybox.pack.js                 js/lib/jquery/jquery.fancybox.pack.js
+js/lib/jquery/jquery-1.10.2.js                        js/lib/jquery/jquery-1.10.2.js
+js/lib/jquery/jquery-1.10.2.min.js                    js/lib/jquery/jquery-1.10.2.min.js
+js/lib/jquery/jquery-1.10.2.min.map                   js/lib/jquery/jquery-1.10.2.min.map
+js/lib/jquery/noconflict.js                           js/lib/jquery/noconflict.js
+lib/PayPal                                            lib/PayPal
+skin/adminhtml/default/default/esmart                 skin/adminhtml/default/default/esmart
+skin/frontend/base/default/esmart                     skin/frontend/base/default/esmart
+skin/frontend/base/default/lib/jquery                 skin/frontend/base/default/lib/jquery

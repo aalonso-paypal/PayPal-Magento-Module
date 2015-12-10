@@ -25,7 +25,7 @@
 <config>
     <modules>
         <Esmart_PayPalBrasil>
-            <version>0.4.3.2</version>
+            <version>0.4.4.0</version>
         </Esmart_PayPalBrasil>
     </modules>
     <global>

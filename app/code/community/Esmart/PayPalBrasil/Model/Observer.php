@@ -84,14 +84,14 @@ class Esmart_PayPalBrasil_Model_Observer
 
         $block = $observer->getBlock();
 
-        if (get_class($block) != 'Esmart_PayPalBrasil_Block_Plus_Form') {
+        if (!($block instanceof Esmart_PayPalBrasil_Block_Plus_Form)) {
             return $this;
         }
 
-        $transport = $observer->getTransport();
-        $html = $transport->getHtml();
-
-        $html .= Mage::helper('esmart_paypalbrasil')->getEventsScriptBlock();
+        /** @var Varien_Object $transport */
+        $transport  = $observer->getTransport();
+        $html       = $transport->getHtml();
+        $html      .= $this->_helper()->getEventsScriptBlock();
 
         $transport->setHtml($html);
 
@@ -127,5 +127,14 @@ class Esmart_PayPalBrasil_Model_Observer
         }
 
         return $this;
+    }
+
+
+    /**
+     * @return Esmart_PayPalBrasil_Helper_Data
+     */
+    protected function _helper()
+    {
+        return Mage::helper('esmart_paypalbrasil');
     }
 }
