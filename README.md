@@ -22,6 +22,19 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 
 <h2>CHANGELOG</h2>
 
+<b>[26.5 - BETA]</b><br/>
+- Correção de compatibilidade com firecheckout.
+- Correção de campos para magento sem OSC.
+
+<b>[26.4 - BETA]</b><br/>
+- Correção do checkbox de mesmo endereço de cobrança e envio.
+
+<b>[26.3 - STABLE]</b><br/>
+- Correção do placeholder de email sendo enviado no lugar do Email do cliente.
+
+<b>[26.2 - STABLE]</b><br/>
+- Correção Termos e Condições para ExpressCheckout.
+
 <b>[26.1 - STABLE]</b><br/>
 - Correção de constante não existente, que ocorre em versões antigas do modulo principal do Paypal.
 
