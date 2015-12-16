@@ -451,8 +451,9 @@ class Esmart_PayPalBrasil_Model_Plus extends Mage_Payment_Model_Method_Abstract
     public function getCustomerInformation($quote = null)
     {
         /** @var Esmart_PayPalBrasil_Helper_Data $helper */
-        $helper = Mage::helper('esmart_paypalbrasil');
+        $helper = $this->_helper();
 
+        /** @var Mage_Sales_Model_Quote $quote */
         $quote  = $helper->getQuote($quote);
 
         /**
@@ -470,20 +471,13 @@ class Esmart_PayPalBrasil_Model_Plus extends Mage_Payment_Model_Method_Abstract
         $lastname   = Mage::getStoreConfig('payment/paypal_plus/lastname');
         $email      = Mage::getStoreConfig('payment/paypal_plus/email');
         $phone      = Mage::getStoreConfig('payment/paypal_plus/phone');
-        $payerTaxId = $helper->getCpfCnpjOrTaxvat($customer, $this->nonPersistedData);
 
-        if (empty($payerTaxId)) {
-            $payerTaxId = $helper->getCpfCnpjOrTaxvat($address, $this->nonPersistedData);
-        }
-
-        if (empty($payerTaxId)) {
-            $payerTaxId = $quote->getCustomerTaxvat();
-        }
+        $payerTaxId = $this->_getPayerTaxId($address);
 
         $return = array(
             'payerFirstName' => $address->getData($firstname),
             'payerLastName'  => $address->getData($lastname),
-            'payerEmail'     => $address->getEmail(),
+            'payerEmail'     => $this->_getEmail($address),
             'payerTaxIdType' => $helper->checkIsCpfOrCnpj($payerTaxId),
             'payerTaxId'     => $payerTaxId,
             'payerPhone'     => $address->getData($phone),
@@ -829,9 +823,12 @@ class Esmart_PayPalBrasil_Model_Plus extends Mage_Payment_Model_Method_Abstract
         $lastname  = Mage::getStoreConfig('payment/paypal_plus/recipient_lastname');
         $lastname  = $this->_helper()->getDataFromObject($address, $this->nonPersistedData, $lastname);
 
+        $firstname = trim($firstname);
+        $lastname  = trim($lastname);
+
         $name      = "{$firstname} {$lastname}";
 
-        if (empty(trim($name))) {
+        if (empty($name)) {
             Mage::throwException($this->_helper()->__('Name cannot be empty.'));
         }
 
@@ -931,6 +928,72 @@ class Esmart_PayPalBrasil_Model_Plus extends Mage_Payment_Model_Method_Abstract
 
 
     /**
+     * @param Mage_Sales_Model_Quote_Address $address
+     *
+     * @return null|string
+     */
+    protected function _getEmail(Mage_Sales_Model_Quote_Address $address)
+    {
+        /**
+         * @var Mage_Sales_Model_Quote $quote
+         */
+        $quote = $this->_getQuote($address);
+        $email = $quote ? $quote->getCustomer()->getData('email') : null;
+
+        if (empty($email)) {
+            $email = $address->getEmail();
+        }
+
+        if (empty($email)) {
+            $email = $quote->getCustomerEmail();
+        }
+
+        if (empty($email)) {
+            $email = $this->_getFromRequest('email');
+        }
+
+        return $email;
+    }
+
+
+    /**
+     * @param Mage_Sales_Model_Quote_Address $address
+     *
+     * @return null|string
+     */
+    protected function _getPayerTaxId(Mage_Sales_Model_Quote_Address $address)
+    {
+        /**
+         * @var Mage_Sales_Model_Quote       $quote
+         * @var Mage_Customer_Model_Customer $customer
+         */
+        $quote    = $this->_getQuote($address);
+        $customer = $quote ? $quote->getCustomer() : null;
+
+        $payerTaxId = $this->_helper()->getCpfCnpjOrTaxvat($customer, $this->nonPersistedData);
+
+        if (empty($payerTaxId)) {
+            $payerTaxId = $this->_helper()->getCpfCnpjOrTaxvat($address, $this->nonPersistedData);
+        }
+
+        if (empty($payerTaxId)) {
+            $payerTaxId = $quote->getCustomerTaxvat();
+        }
+
+        if (empty($payerTaxId)) {
+            $index = Mage::getStoreConfig('payment/paypal_plus/cpf');
+            $payerTaxId = $this->_getFromRequest($index);
+        }
+
+        if (empty($payerTaxId)) {
+            $payerTaxId = $this->_getFromRequest('taxvat');
+        }
+
+        return $payerTaxId;
+    }
+
+
+    /**
      * @param string|array $index
      *
      * @return mixed
@@ -943,16 +1006,36 @@ class Esmart_PayPalBrasil_Model_Plus extends Mage_Payment_Model_Method_Abstract
 
         $data = null;
 
-        foreach ($index as $idx) {
-            $billing = Mage::app()->getRequest()->getParam('billing');
-            $data    = isset($billing[$idx]) && $billing[$idx] ? $billing[$idx] : null;
+        $addressTypes = array(
+            Mage_Sales_Model_Quote_Address::TYPE_BILLING,
+            Mage_Sales_Model_Quote_Address::TYPE_SHIPPING
+        );
 
-            if (!empty($data)) {
-                return $data;
+        foreach ($addressTypes as $addressType) {
+            foreach ($index as $idx) {
+                $address = Mage::app()->getRequest()->getParam($addressType);
+                $data    = isset($address[$idx]) && $address[$idx] ? $address[$idx] : null;
+
+                if (!empty($data)) {
+                    return $data;
+                }
             }
         }
 
         return $data;
+    }
+
+
+    /**
+     * @return Mage_Sales_Model_Quote
+     */
+    protected function _getQuote(Mage_Sales_Model_Quote_Address $address = null)
+    {
+        if ($address && $address->getQuote()) {
+            return $address->getQuote();
+        }
+
+        return $this->_helper()->getQuote();
     }
 
 

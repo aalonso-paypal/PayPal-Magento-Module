@@ -13,9 +13,9 @@ if (typeof EsmartPaypalBrasilPPPlus !== 'object') {
                 dataType: 'json',
                 type: 'post',
                 url: this.base_url + 'paypalbrasil/express/generateUrl',
-		data: $jPPPlus('#payment_form_paypal_plus').closest('form').first().serializeArray(),
+		        data: $jPPPlus('#payment_form_paypal_plus').closest('form').first().serializeArray(),
 //                data: $jPPPlus('form').serializeArray(),
-                async: false,
+                async: true,
                 complete: function (response) {
 
                     var responseContent = $jPPPlus.parseJSON(response.responseText);
