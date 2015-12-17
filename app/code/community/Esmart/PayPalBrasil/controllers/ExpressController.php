@@ -61,9 +61,10 @@ class Esmart_PayPalBrasil_ExpressController extends Esmart_PayPalBrasil_Controll
         $postData = $this->getRequest()->getParams();
 
         /** @var Esmart_PayPalBrasil_Model_Plus $model */
-        $model = Mage::getModel('esmart_paypalbrasil/plus')->setNonPersistedData($postData);
+        $model  = Mage::getModel('esmart_paypalbrasil/plus')->setNonPersistedData($postData);
 
-        $data = array();
+        $data   = array();
+        $errors = array();
 
         try {
             $payerInfo   = $model->getCustomerInformation();
@@ -71,17 +72,27 @@ class Esmart_PayPalBrasil_ExpressController extends Esmart_PayPalBrasil_Controll
 
             $data = array_merge($payerInfo, $approvalUrl);
 
+            $isValid = true;
+
             foreach ($data as $key => $value) {
                 if (is_null($value) && $key !== 'rememberedCards') {
-                    throw new Exception('incomplete_customer');
+                    $isValid = false;
+                    $errors[] = Mage::helper('esmart_paypalbrasil')->__("Field '%s' is empty.", $key);
                 }
+            }
+
+            if ($isValid === false) {
+                throw new Exception('incomplete_customer');
             }
 
             $return     = array('success' => $data);
 
         } catch (Exception $exception) {
             Mage::helper('esmart_paypalbrasil')->logException(__FILE__, __CLASS__, __FUNCTION__, __LINE__, self::LOG_FILENAME, null, $data);
-            $return = array('error' => $exception->getMessage());
+            $return = array(
+                'error'  => $exception->getMessage(),
+                'errors' => $errors
+            );
         }
 
         Esmart_PayPalBrasil_Model_Debug::writeLog();
