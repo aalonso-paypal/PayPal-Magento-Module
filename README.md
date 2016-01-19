@@ -22,6 +22,15 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 
 <h2>CHANGELOG</h2>
 
+<b>[26.8 - BETA]</b><br/>
+- Correção de Bugs.
+
+<b>[26.7 - BETA]</b><br/>
+- tbd
+- 
+<b>[26.6 - BETA]</b><br/>
+- tbd
+
 <b>[26.5 - BETA]</b><br/>
 - Correção de compatibilidade com firecheckout.
 - Correção de campos para magento sem OSC.
