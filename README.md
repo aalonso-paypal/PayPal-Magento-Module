@@ -27,7 +27,7 @@ PayPal Brazil Official Module Repositiory containing constant updated versioning
 
 <b>[26.7 - BETA]</b><br/>
 - tbd
-- 
+
 <b>[26.6 - BETA]</b><br/>
 - tbd
 
