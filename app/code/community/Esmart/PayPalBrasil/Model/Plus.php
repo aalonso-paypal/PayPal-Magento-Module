@@ -451,32 +451,31 @@ class Esmart_PayPalBrasil_Model_Plus extends Mage_Payment_Model_Method_Abstract
     public function getCustomerInformation($quote = null)
     {
         /** @var Esmart_PayPalBrasil_Helper_Data $helper */
-        $helper = Mage::helper('esmart_paypalbrasil');
+        $helper = $this->_helper();
 
+        /** @var Mage_Sales_Model_Quote $quote */
         $quote  = $helper->getQuote($quote);
 
-        $customer = $quote->getCustomer();
+        /**
+         * @var Mage_Customer_Model_Customer                               $customer
+         * @var Mage_Sales_Model_Quote_Address|Mage_Customer_Model_Address $address
+         */
+        $customer   = $quote->getCustomer();
+        $address    = $quote->getBillingAddress();
 
-        $addressBilling = $customer->getDefaultBillingAddress();
-
-        if (!$addressBilling) {
-            $addressBilling = $quote->getBillingAddress();
-        }
-
-        $firstname = Mage::getStoreConfig('payment/paypal_plus/firstname');
-        $lastname  = Mage::getStoreConfig('payment/paypal_plus/lastname');
-        $email     = Mage::getStoreConfig('payment/paypal_plus/email');
-        $phone     = Mage::getStoreConfig('payment/paypal_plus/phone');
-
-        $payerTaxId = $helper->getCpfCnpjOrTaxvat($customer, $this->nonPersistedData);
+        $firstname  = $this->_getFirstname($address);
+        $lastname   = $this->_getLastname($address);
+        $email      = $this->_getEmail($address);
+        $payerTaxId = $this->_getPayerTaxId($address);
+        $phone      = $this->_getTelephone($address);
 
         $return = array(
-            'payerFirstName' => $helper->getDataFromObject($customer, $this->nonPersistedData, $firstname),
-            'payerLastName'  => $helper->getDataFromObject($customer, $this->nonPersistedData, $lastname),
-            'payerEmail'     => $helper->getDataFromObject($customer, $this->nonPersistedData, $email),
+            'payerFirstName' => $firstname,
+            'payerLastName'  => $lastname,
+            'payerEmail'     => $email,
             'payerTaxIdType' => $helper->checkIsCpfOrCnpj($payerTaxId),
             'payerTaxId'     => $payerTaxId,
-            'payerPhone'     => $helper->getDataFromObject($addressBilling, $this->nonPersistedData, $phone),
+            'payerPhone'     => $phone,
             'rememberedCards'=> $customer->getPpalRememberedCards(),
         );
 
@@ -627,68 +626,39 @@ class Esmart_PayPalBrasil_Model_Plus extends Mage_Payment_Model_Method_Abstract
 
         $quote  = $helper->getQuote($quote);
 
-        $addressShipping = $quote->getShippingAddress();
+        /** @var Mage_Sales_Model_Quote_Address $address */
+        $address = $quote->getShippingAddress();
 
-        $shipping = new \PayPal\Api\ShippingAddress();
-
-        $firstname = Mage::getStoreConfig('payment/paypal_plus/recipient_firstname');
-        $firstname = $helper->getDataFromObject($addressShipping, $this->nonPersistedData, $firstname);
-
-        $lastname = Mage::getStoreConfig('payment/paypal_plus/recipient_lastname');
-        $lastname = $helper->getDataFromObject($addressShipping, $this->nonPersistedData, $lastname);
-
-        $city = Mage::getStoreConfig('payment/paypal_plus/city');
-        $city = $helper->getDataFromObject($addressShipping, $this->nonPersistedData, $city);
-
-        $countryCode = Mage::getStoreConfig('payment/paypal_plus/country_code');
-        $countryCode = $helper->getDataFromObject($addressShipping, $this->nonPersistedData, $countryCode);
-
-        $postalCode = Mage::getStoreConfig('payment/paypal_plus/postal_code');
-        $postalCode = $helper->getDataFromObject($addressShipping, $this->nonPersistedData, $postalCode);
-
-        $state = Mage::getStoreConfig('payment/paypal_plus/state');
-        $state = $helper->getDataFromObject($addressShipping, $this->nonPersistedData, $state);
-
-        if (is_numeric($state)) {
-            /** @var Mage_Directory_Model_Region $directoryRegion */
-            $directoryRegion = Mage::getModel('directory/region')->load($state);
-            $state = $directoryRegion->getName();
+        if ((int) $address->getData('same_as_billing') === 1) {
+            $address = $quote->getBillingAddress();
         }
 
-        $line1_p1 = Mage::getStoreConfig('payment/paypal_plus/address_line_1_p1');
-        $line1_p1 = $helper->getDataFromObject($addressShipping, $this->nonPersistedData, $line1_p1);
+        $shipping    = new \PayPal\Api\ShippingAddress();
 
-        $line1_p2 = Mage::getStoreConfig('payment/paypal_plus/address_line_1_p2');
-        $line1_p2 = $helper->getDataFromObject($addressShipping, $this->nonPersistedData, $line1_p2);
+        $streetLines = $address->getStreet();
+        $lastLine    = (string) array_pop($streetLines);
+        $firstLine   = (string) implode(', ', $streetLines);
 
-        $line1_p3 = Mage::getStoreConfig('payment/paypal_plus/address_line_1_p3');
-        $line1_p3 = $helper->getDataFromObject($addressShipping, $this->nonPersistedData, $line1_p3);
+        $data = new Varien_Object(array(
+            'recipient_name' => $this->_getRecipientName($address),
+            'city'           => $this->_getCity($address),
+            'country_code'   => $this->_getCountryCode($address),
+            'postal_code'    => $this->_getPostalCode($address),
+            'state'          => $this->_getState($address),
+            'first_line'     => $firstLine,
+            'last_line'      => $lastLine
+        ));
 
-        $line1    = "{$line1_p1}, {$line1_p2}, {$line1_p3}";
+        $shipping->setRecipientName($data->getData('recipient_name'))
+            ->setCity($data->getData('city'))
+            ->setCountryCode($data->getData('country_code'))
+            ->setPostalCode($data->getData('postal_code'))
+            ->setLine1($data->getData('first_line'))
+            ->setLine2($data->getData('last_line'))
+            ->setState($data->getData('state'));
 
-        $line2 = Mage::getStoreConfig('payment/paypal_plus/address_line_2');
-        $line2 = $helper->getDataFromObject($addressShipping, $this->nonPersistedData, $line2);
-
-        $shipping->setRecipientName("{$firstname} {$lastname}")
-            ->setCity($city)
-            ->setCountryCode($countryCode)
-            ->setPostalCode($postalCode)
-            ->setLine1($line1)
-            ->setLine2($line2)
-            ->setState($state);
-
-        $data = array(
-            'Recipient Name' => $shipping->getRecipientName(),
-            'Line 1'         => $shipping->getLine1(),
-            'Line 2'         => $shipping->getLine2(),
-            'City'           => $shipping->getCity(),
-            'Postal Code'    => $shipping->getPostalCode(),
-            'Country Code'   => $shipping->getCountryCode(),
-            'State'          => $shipping->getState(),
-        );
-        Esmart_PayPalBrasil_Model_Debug::appendContent('[SHIPPING ADDRESS]', 'createPayment', $data);
-
-        Esmart_PayPalBrasil_Model_Debug::appendContent('[MAGENTO ADDRESS DATA]', 'createPayment', $addressShipping->toArray());
+        Esmart_PayPalBrasil_Model_Debug::appendContent('[SHIPPING ADDRESS]', 'createPayment', $data->toArray());
+        Esmart_PayPalBrasil_Model_Debug::appendContent('[MAGENTO ADDRESS DATA]', 'createPayment', $address->toArray());
 
         return $shipping;
     }
@@ -831,4 +801,318 @@ class Esmart_PayPalBrasil_Model_Plus extends Mage_Payment_Model_Method_Abstract
 
         return $this;
     }
+
+
+    /**
+     * @param Mage_Sales_Model_Quote_Address $address
+     *
+     * @return string
+     *
+     * @throws Mage_Core_Exception
+     */
+    protected function _getRecipientName(Mage_Sales_Model_Quote_Address $address)
+    {
+        $firstname = Mage::getStoreConfig('payment/paypal_plus/recipient_firstname');
+        $firstname = $this->_helper()->getDataFromObject($address, $this->nonPersistedData, $firstname);
+
+        $lastname  = Mage::getStoreConfig('payment/paypal_plus/recipient_lastname');
+        $lastname  = $this->_helper()->getDataFromObject($address, $this->nonPersistedData, $lastname);
+
+        $firstname = trim($firstname);
+        $lastname  = trim($lastname);
+
+        $name      = "{$firstname} {$lastname}";
+
+        if (empty($name)) {
+            Mage::throwException($this->_helper()->__('Name cannot be empty.'));
+        }
+
+        return $name;
+    }
+
+
+    /**
+     * @param Mage_Sales_Model_Quote_Address $address
+     *
+     * @return string
+     *
+     * @throws Mage_Core_Exception
+     */
+    protected function _getCountryCode(Mage_Sales_Model_Quote_Address $address)
+    {
+        $countryCode = Mage::getStoreConfig('payment/paypal_plus/country_code');
+        $countryCode = $this->_helper()->getDataFromObject($address, $this->nonPersistedData, $countryCode);
+
+        $countryCode = trim($countryCode);
+
+        if (empty($countryCode)) {
+            Mage::throwException($this->_helper()->__('Country must be selected.'));
+        }
+
+        return $countryCode;
+    }
+
+
+    /**
+     * @param Mage_Sales_Model_Quote_Address $address
+     *
+     * @return string
+     *
+     * @throws Mage_Core_Exception
+     */
+    protected function _getPostalCode(Mage_Sales_Model_Quote_Address $address)
+    {
+        $postalCode = Mage::getStoreConfig('payment/paypal_plus/postal_code');
+        $postalCode = $this->_helper()->getDataFromObject($address, $this->nonPersistedData, $postalCode);
+
+        $postalCode = trim($postalCode);
+
+        if (empty($postalCode)) {
+            Mage::throwException($this->_helper()->__('Postal code cannot be empty.'));
+        }
+
+        return $postalCode;
+    }
+
+
+    /**
+     * @param Mage_Sales_Model_Quote_Address $address
+     *
+     * @return string
+     */
+    protected function _getState(Mage_Sales_Model_Quote_Address $address)
+    {
+        $state = $address->getRegionCode();
+
+        if (empty($state)) {
+            $state = Mage::getStoreConfig('payment/paypal_plus/state');
+            $state = $this->_helper()->getDataFromObject($address->getRegionCode(), $this->nonPersistedData, $state);
+        }
+
+        if (empty($state)) {
+            $state = $this->_getFromRequest(array('region_id', 'region'));
+        }
+
+        if (is_numeric($state)) {
+            /** @var Mage_Directory_Model_Region $directoryRegion */
+            $directoryRegion = Mage::getModel('directory/region')->load($state);
+            $state = $directoryRegion->getCode();
+        }
+
+        return $state;
+    }
+
+
+    /**
+     * @param Mage_Sales_Model_Quote_Address $address
+     *
+     * @return string
+     */
+    protected function _getCity(Mage_Sales_Model_Quote_Address $address)
+    {
+        $city = $this->_helper()->getDataFromObject(
+            $address, $this->nonPersistedData, Mage::getStoreConfig('payment/paypal_plus/city')
+        );
+
+        if (empty($city)) {
+            $city = $this->_getFromRequest('city');
+        }
+
+        $city = trim($city);
+
+        if (empty($city)) {
+            Mage::throwException($this->_helper()->__('City cannot be empty.'));
+        }
+
+        return $city;
+    }
+
+
+    /**
+     * @param Mage_Sales_Model_Quote_Address $address
+     *
+     * @return null|string
+     */
+    protected function _getEmail(Mage_Sales_Model_Quote_Address $address)
+    {
+        /**
+         * @var Mage_Sales_Model_Quote $quote
+         */
+        $quote = $this->_getQuote($address);
+        $email = $quote ? $quote->getCustomer()->getData('email') : null;
+
+        if (empty($email)) {
+            $email = $address->getEmail();
+        }
+
+        if (empty($email)) {
+            $email = $quote->getCustomerEmail();
+        }
+
+        if (empty($email)) {
+            $email = $this->_getFromRequest('email');
+        }
+
+        return $email;
+    }
+
+
+    /**
+     * @param Mage_Sales_Model_Quote_Address $address
+     *
+     * @return null|string
+     */
+    protected function _getPayerTaxId(Mage_Sales_Model_Quote_Address $address)
+    {
+        /**
+         * @var Mage_Sales_Model_Quote       $quote
+         * @var Mage_Customer_Model_Customer $customer
+         */
+        $quote    = $this->_getQuote($address);
+        $customer = $quote ? $quote->getCustomer() : null;
+
+        $payerTaxId = $this->_helper()->getCpfCnpjOrTaxvat($customer, $this->nonPersistedData);
+
+        if (empty($payerTaxId)) {
+            $payerTaxId = $this->_helper()->getCpfCnpjOrTaxvat($address, $this->nonPersistedData);
+        }
+
+        if (empty($payerTaxId)) {
+            $payerTaxId = $quote->getCustomerTaxvat();
+        }
+
+        if (empty($payerTaxId)) {
+            $index = Mage::getStoreConfig('payment/paypal_plus/cpf');
+            $payerTaxId = $this->_getFromRequest($index);
+        }
+
+        if (empty($payerTaxId)) {
+            $payerTaxId = $this->_getFromRequest('taxvat');
+        }
+
+        return $payerTaxId;
+    }
+
+
+    /**
+     * @param Mage_Sales_Model_Quote_Address $address
+     *
+     * @return string
+     */
+    protected function _getTelephone(Mage_Sales_Model_Quote_Address $address)
+    {
+        $fieldId = Mage::getStoreConfig('payment/paypal_plus/phone');
+        return $this->_extractData($address, 'telephone', $fieldId);
+    }
+
+
+    /**
+     * @param Mage_Sales_Model_Quote_Address $address
+     *
+     * @return string
+     */
+    protected function _getFirstname(Mage_Sales_Model_Quote_Address $address)
+    {
+        $fieldId = Mage::getStoreConfig('payment/paypal_plus/firstname');
+        return $this->_extractData($address, 'firstname', $fieldId);
+    }
+
+
+    /**
+     * @param Mage_Sales_Model_Quote_Address $address
+     *
+     * @return string
+     */
+    protected function _getLastname(Mage_Sales_Model_Quote_Address $address)
+    {
+        $fieldId = Mage::getStoreConfig('payment/paypal_plus/lastname');
+        return $this->_extractData($address, 'lastname', $fieldId);
+    }
+    
+
+    /**
+     * @param Mage_Sales_Model_Quote_Address $address
+     * @param string                         $defaultFieldId
+     * @param string                         $configFieldId
+     *
+     * @return null|string
+     */
+    protected function _extractData(Mage_Sales_Model_Quote_Address $address, $defaultFieldId, $configFieldId = null)
+    {
+        $data = null;
+
+        if (!empty($defaultFieldId)) {
+            $data = $address->getData($configFieldId);
+        }
+
+        if (empty($data)) {
+            $data = $address->getData($defaultFieldId);
+        }
+
+        if (!empty($defaultFieldId) && empty($data)) {
+            $data = $this->_getFromRequest($configFieldId);
+        }
+
+        if (empty($data)) {
+            $data = $this->_getFromRequest($defaultFieldId);
+        }
+
+        return $data;
+    }
+
+
+    /**
+     * @param string|array $index
+     *
+     * @return mixed
+     */
+    protected function _getFromRequest($index)
+    {
+        if (!is_array($index)) {
+            $index = array($index);
+        }
+
+        $data = null;
+
+        $addressTypes = array(
+            Mage_Sales_Model_Quote_Address::TYPE_BILLING,
+            Mage_Sales_Model_Quote_Address::TYPE_SHIPPING
+        );
+
+        foreach ($addressTypes as $addressType) {
+            foreach ($index as $idx) {
+                $address = Mage::app()->getRequest()->getParam($addressType);
+                $data    = isset($address[$idx]) && $address[$idx] ? $address[$idx] : null;
+
+                if (!empty($data)) {
+                    return $data;
+                }
+            }
+        }
+
+        return $data;
+    }
+
+
+    /**
+     * @return Mage_Sales_Model_Quote
+     */
+    protected function _getQuote(Mage_Sales_Model_Quote_Address $address = null)
+    {
+        if ($address && $address->getQuote()) {
+            return $address->getQuote();
+        }
+
+        return $this->_helper()->getQuote();
+    }
+
+
+    /**
+     * @return Esmart_PayPalBrasil_Helper_Data
+     */
+    protected function _helper()
+    {
+        return Mage::helper('esmart_paypalbrasil');
+    }
+
 }

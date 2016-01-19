@@ -179,28 +179,28 @@ class Esmart_PayPalBrasil_Helper_Data extends Mage_Core_Helper_Data
     /**
      * Get CPF, CNPJ, or TaxVAT
      *
-     * @param Mage_Customer_Model_Customer $customer
-     * @param Varien_Object $nonPersistedData
+     * @param Mage_Core_Model_Abstract $object
+     * @param Varien_Object            $nonPersistedData
      *
      * @return string
      */
-    public function getCpfCnpjOrTaxvat(Mage_Customer_Model_Customer $customer, Varien_Object $nonPersistedData)
+    public function getCpfCnpjOrTaxvat(Mage_Core_Model_Abstract $object, Varien_Object $nonPersistedData)
     {
         $cpf     = Mage::getStoreConfig('payment/paypal_plus/cpf');
-        $cpfData = $this->getDataFromObject($customer, $nonPersistedData, $cpf);
+        $cpfData = $this->getDataFromObject($object, $nonPersistedData, $cpf);
 
         if (!empty($cpfData)) {
             return $cpfData;
         }
 
         $cnpj     = Mage::getStoreConfig('payment/paypal_plus/cnpj');
-        $cnpjData = $this->getDataFromObject($customer, $nonPersistedData, $cnpj);
+        $cnpjData = $this->getDataFromObject($object, $nonPersistedData, $cnpj);
 
         if (!empty($cnpjData)) {
             return $cnpjData;
         }
 
-        return $this->getDataFromObject($customer, $nonPersistedData, 'taxvat');
+        return $this->getDataFromObject($object, $nonPersistedData, 'taxvat');
     }
 
     /**
@@ -210,7 +210,11 @@ class Esmart_PayPalBrasil_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getEventsScriptBlock()
     {
-        return sprintf(self::JS_BASE, $this->getCheckoutType(), Mage::getBaseUrl());
+        return sprintf(
+            self::JS_BASE,
+            $this->getCheckoutType(),
+            Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK, true)
+        );
     }
 
     /**
@@ -348,6 +352,10 @@ class Esmart_PayPalBrasil_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getDataFromObject($object, $nonPersistedData, $index)
     {
+        if (empty($object) || !method_exists($object, 'getData')) {
+            return null;
+        }
+
         if ($object->getData($index)) {
             return $object->getData($index);
         }

@@ -2,6 +2,8 @@ $jPPPlus(document).ready(function () {
 
     EsmartPaypalBrasilBtnContinue.setElement('#review-buttons-container button:not(#esmart-paypalbrasil-btn-submit)', '#review-buttons-container');
 
+    $jPPPlus('#esmart-paypalbrasil-btn-submit').removeAttr('onclick');
+
     $jPPPlus("input[type=radio][name='payment[method]']").unbind('change').change(function (e) {
         e.preventDefault();
 

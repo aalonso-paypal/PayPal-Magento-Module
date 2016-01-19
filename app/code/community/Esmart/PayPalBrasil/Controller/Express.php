@@ -210,7 +210,9 @@ class Esmart_PayPalBrasil_Controller_Express extends Mage_Paypal_Controller_Expr
              * If there's a shipping method already set to ShippingAddres then avoid the paypal/express/review page
              * and place the order.
              */
-            $requiredAgreements = Mage::helper('checkout')->getRequiredAgreementIds();
+            //Obsolete since PayPal return never send POST values/parameters, and agreement will never populated here
+            /*
+             $requiredAgreements = Mage::helper('checkout')->getRequiredAgreementIds();
             if ($requiredAgreements) {
                 $postedAgreements = array_keys($this->getRequest()->getPost('agreement', array()));
                 if (array_diff($requiredAgreements, $postedAgreements)) {
@@ -221,6 +223,7 @@ class Esmart_PayPalBrasil_Controller_Express extends Mage_Paypal_Controller_Expr
                     );
                 }
             }
+            */
 
             /**
              * Places the Order
